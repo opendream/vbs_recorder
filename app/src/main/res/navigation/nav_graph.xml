@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/HomeFragment">
+
+    <fragment
+        android:id="@+id/HomeFragment"
+        android:name="th.co.opendream.vbs_recorder.fragments.HomeFragment"
+        android:label="@string/home_fragment_label"
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_HomeFragment_to_RecordFragment"
+            app:destination="@id/RecordFragment" />
+
+        <action
+            android:id="@+id/action_HomeFragment_to_PlayBackFragment"
+            app:destination="@id/PlayBackFragment" />
+
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/RecordFragment"
+        android:name="th.co.opendream.vbs_recorder.fragments.RecordFragment"
+        android:label="@string/record_fragment_label"
+        tools:layout="@layout/fragment_record">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/PlayBackFragment"
+        android:name="th.co.opendream.vbs_recorder.fragments.PlayBackFragment"
+        android:label="@string/playback_fragment_label"
+        tools:layout="@layout/fragment_play_back">
+
+        <action
+            android:id="@+id/action_PlayBackFragment_to_AudioFilterFragment"
+            app:destination="@id/AudioFilterFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/FilterFragment"
+        android:name="th.co.opendream.vbs_recorder.fragments.FilterFragment"
+        android:label="@string/filter_fragment_label"
+        tools:layout="@layout/fragment_filter">
+    </fragment>
+
+    <fragment
+        android:id="@+id/AudioFilterFragment"
+        android:name="th.co.opendream.vbs_recorder.fragments.audio.TransformFragment"
+        android:label="@string/audio_filter_fragment_label"
+        tools:layout="@layout/fragment_audio_transform">
+    </fragment>
+
+    <action
+        android:id="@+id/action_HomeFragment_to_FilterFragment"
+        app:destination="@id/FilterFragment" />
+
+    <action
+        android:id="@+id/action_FilterFragment_to_HomeFragment"
+        app:destination="@id/HomeFragment" />
+
+
+</navigation>

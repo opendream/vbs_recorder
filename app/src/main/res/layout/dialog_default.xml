@@ -1,0 +1,66 @@
+<!-- res/layout/custom_dialog.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Title"
+        android:textSize="25dp"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="@font/ibm_plex_sans_thai_semi_bold"/>
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ibm_plex_sans_thai_semi_bold"
+        android:text="Enter something"
+        android:textAlignment="center"
+        android:textSize="18dp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/button_no"
+                android:layout_marginRight="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No"
+                android:textColor="@color/black"
+                android:fontFamily="@font/ibm_plex_sans_thai_semi_bold"
+                android:backgroundTint="@color/colorSecondary" />
+
+            <Button
+                android:id="@+id/button_yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="Yes"
+                android:textColor="@color/white"
+                android:fontFamily="@font/ibm_plex_sans_thai_semi_bold" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+
+
+</LinearLayout>

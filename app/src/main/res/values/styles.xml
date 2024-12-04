@@ -1,0 +1,10 @@
+<resources>
+    <style name="VBSAlertDialog" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorSecondary">@color/colorGray</item>
+        <item name="android:fontFamily">@font/ibm_plex_sans_thai_semi_bold</item>
+
+        <item name="android:background">@android:color/white</item>
+        <item name="android:padding">5dp</item>
+    </style>
+</resources>

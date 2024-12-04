@@ -1,0 +1,16 @@
+<!-- res/layout/empty_view.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/empty_view_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No data."
+        android:textSize="18sp"
+        android:textColor="@android:color/darker_gray"
+        android:fontFamily="@font/ibm_plex_sans_thai_semi_bold"/>
+</LinearLayout>

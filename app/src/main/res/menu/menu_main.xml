@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="th.co.opendream.vbs_recorder.activities.MainActivity">
+
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/baseline_refresh_24"
+        android:orderInCategory="100"
+        android:title="@string/action_refresh"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_filter"
+        android:icon="@mipmap/tabler_icon_filter"
+        android:orderInCategory="100"
+        android:title="@string/action_filter"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@mipmap/tabler_icon_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="always" />
+</menu>

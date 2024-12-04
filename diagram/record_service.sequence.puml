@@ -1,0 +1,104 @@
+@startuml
+participant RecordFragment
+participant RecordService
+participant AudioRecord
+participant Coroutine
+participant AudioProcessor
+participant ChunkProcessor
+participant PCM_File
+participant FileConverter
+participant WAV_File
+participant MEDIA_Android
+participant Db
+
+RecordFragment -> RecordService: Start
+RecordService -> AudioRecord: Request for Record
+RecordService -> AudioProcessor: Create
+RecordService -> Coroutine: Launch
+
+activate Coroutine
+
+Coroutine -> AudioRecord: Read Data
+activate AudioRecord
+AudioRecord -> Coroutine: Data
+deactivate AudioRecord
+
+Coroutine -> AudioProcessor: processAudioChunk
+activate AudioProcessor
+
+AudioProcessor -> PCM_File: Create file
+
+AudioProcessor -> ChunkProcessor: data
+activate AudioProcessor #005500
+activate ChunkProcessor
+ChunkProcessor -> AudioProcessor: process data
+deactivate AudioProcessor #005500
+deactivate ChunkProcessor
+AudioProcessor -> PCM_File: Append
+
+
+Coroutine -> AudioRecord: Read Data
+activate AudioRecord
+AudioRecord -> Coroutine: Data
+deactivate AudioRecord
+
+Coroutine -> AudioProcessor: processAudioChunk
+
+AudioProcessor -> ChunkProcessor: data
+activate AudioProcessor #005500
+activate ChunkProcessor
+ChunkProcessor -> AudioProcessor: process data
+deactivate AudioProcessor #005500
+deactivate ChunkProcessor
+AudioProcessor -> PCM_File: Append
+
+Coroutine -> AudioRecord: Read Data
+activate AudioRecord
+AudioRecord -> Coroutine: Data
+deactivate AudioRecord
+
+Coroutine -> AudioProcessor: processAudioChunk
+
+AudioProcessor -> ChunkProcessor: data
+activate AudioProcessor #005500
+activate ChunkProcessor
+ChunkProcessor -> AudioProcessor: process data
+deactivate AudioProcessor #005500
+deactivate ChunkProcessor
+AudioProcessor -> PCM_File: Append
+
+Coroutine -> AudioRecord: Read Data
+activate AudioRecord
+AudioRecord -> Coroutine: Data
+deactivate AudioRecord
+
+Coroutine -> AudioProcessor: processAudioChunk
+
+AudioProcessor -> ChunkProcessor: data
+activate AudioProcessor #005500
+activate ChunkProcessor
+ChunkProcessor -> AudioProcessor: process data
+deactivate AudioProcessor #005500
+deactivate ChunkProcessor
+AudioProcessor -> PCM_File: Append
+
+
+AudioProcessor -> FileConverter: Convert PCM to WAV
+activate FileConverter
+PCM_File <-> FileConverter
+FileConverter -> WAV_File
+deactivate FileConverter
+AudioProcessor -> MEDIA_Android: Save
+AudioProcessor -> Db: Save
+
+
+RecordFragment -> RecordService: Stop
+RecordService -> Coroutine: Cancel
+deactivate Coroutine
+
+RecordService -> AudioProcessor: Stop
+
+AudioProcessor -> MEDIA_Android: Save
+AudioProcessor -> Db: Save
+deactivate AudioProcessor
+@enduml

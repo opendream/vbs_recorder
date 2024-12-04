@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="colorGray">#999999</color>
+    <color name="colorGray_300">#999999</color>
+    <color name="colorGray_800">#232830</color>
+
+    <color name="colorPrimary">#F25B50</color>
+    <color name="colorSecondary">#f7f7f7</color>
+
+    <color name="popUpBackground">#F8E1C9</color>
+
+    <color name="badgeActiveBackground">#F25B50</color>
+    <color name="badgeInactiveBackground">#999999</color>
+
+    <color name="md_theme_light_background">#FFFFFF</color>
+    <color name="md_theme_light_primary">#F25B50</color>
+    <color name="md_theme_light_onPrimary">#FFFFFF</color>
+
+    <color name="md_theme_light_primaryContainer">#332D41</color>
+    <color name="md_theme_light_onPrimaryContainer">#FFFFFF</color>
+
+    <color name="md_theme_light_error">#B3261E</color>
+    <color name="md_theme_light_onError">#FFFFFF</color>
+    <color name="md_theme_light_errorContainer">#F9DEDC</color>
+    <color name="md_theme_light_onErrorContainer">#410E0B</color>
+
+    <color name="md_theme_light_surface">#FFFBFE</color>
+    <color name="md_theme_light_onSurface">#1C1B1F</color>
+    <color name="md_theme_light_surfaceVariant">#E7E0EC</color>
+
+    <color name="md_theme_light_windows_background">#FFFFFF</color>
+    <color name="md_theme_light_popup_background">#FFFFFF</color>
+
+
+    <color name="settingSection">#8F97A4</color>
+    <color name="settingButtonBorder">#C4C6C8</color>
+
+</resources>

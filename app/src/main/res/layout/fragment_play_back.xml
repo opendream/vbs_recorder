@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.PlayBackFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+
+            <LinearLayout
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:id="@+id/sound_wave"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:orientation="vertical">
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/animation_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+
+                        app:lottie_rawRes="@raw/sound_wave"
+
+                        app:lottie_loop="true"
+                        app:lottie_autoPlay="false" />
+
+<!--                    <ImageView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:src="@mipmap/sound_wave" />-->
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/badge_record_original"
+                        android:layout_width="60dp"
+                        android:layout_height="30dp"
+                        android:backgroundTint="@color/badgeActiveBackground"
+                        app:cardCornerRadius="15dp"
+                        app:cardElevation="0dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:fontFamily="@font/ibm_plex_sans_thai_semi_bold"
+                            android:text="Original"
+                            android:textColor="@color/white"
+                            android:textSize="11sp" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/badge_record_high_pass"
+                        android:backgroundTint="@color/badgeInactiveBackground"
+                        android:layout_width="60dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="5dp"
+                        android:visibility="gone"
+                        app:cardCornerRadius="15dp"
+                        app:cardElevation="0dp">
+
+                        <TextView
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:text="High"
+                            android:textSize="11sp"
+                            android:textColor="@color/white"
+                            android:fontFamily="@font/ibm_plex_sans_thai_semi_bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/badge_record_low_pass"
+                        android:backgroundTint="@color/badgeInactiveBackground"
+                        android:layout_width="60dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="5dp"
+                        android:visibility="gone"
+                        app:cardCornerRadius="15dp"
+                        app:cardElevation="0dp">
+
+                        <TextView
+                            android:layout_gravity="center"
+                            android:layout_margin="5dp"
+                            android:text="Low"
+                            android:textSize="11sp"
+                            android:textColor="@color/white"
+                            android:fontFamily="@font/ibm_plex_sans_thai_semi_bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="40dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/tabler_icon_calendar_event" />
+
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:fontFamily="@font/ibm_plex_sans_thai_semi_bold"
+                        android:text="Song Title"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/controls_container"
+            android:background="@color/colorSecondary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- SeekBar with Text -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+
+                <SeekBar
+                    android:id="@+id/seek_bar"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:thumbTint="@color/colorPrimary"
+                    android:progressTint="@color/colorPrimary"
+                    android:progressBackgroundTint="@color/colorGray_800"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/time_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:text="00:00:00 / 00:00:00"
+                    android:textColor="@color/colorGray_800"
+                    android:fontFamily="@font/ibm_plex_sans_thai_semi_bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/seek_bar" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <!-- Playback Controls -->
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <!-- Previous Button -->
+                <ImageButton
+                    android:id="@+id/button_previous"
+                    android:background="@null"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="@string/previous"
+                    android:src="@mipmap/previous" />
+
+                <!-- Play/Pause Button -->
+                <ImageButton
+                    android:id="@+id/button_play_pause"
+                    android:background="@drawable/shape_circle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:contentDescription="@string/play_record"
+                    android:src="@drawable/baseline_play_arrow_24" />
+
+                <!-- Next Button -->
+                <ImageButton
+                    android:id="@+id/button_next"
+                    android:background="@null"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="@string/next"
+                    android:src="@mipmap/next" />
+            </LinearLayout>
+
+
+            <!-- Special Controls -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/button_delete_record"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@null"
+                    android:src="@mipmap/trash" />
+
+                <RelativeLayout
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:visibility="invisible"
+                        android:layout_centerHorizontal="true"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+                        <ImageButton
+                            android:id="@+id/button_high_pass_play"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/baseline_arrow_upward_24" />
+
+                        <ImageButton
+                            android:id="@+id/button_low_pass_play"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/baseline_arrow_downward_24" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+
+                <ImageButton
+                    android:id="@+id/button_sync_record"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@null"
+                    android:src="@mipmap/tabler_icon_cloud_upload" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent">-->
+
+<!--        <LinearLayout-->
+<!--            android:orientation="vertical"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:padding="16dp">-->
+
+
+<!--            <LinearLayout-->
+<!--                android:layout_marginBottom="20dp"-->
+<!--                android:orientation="vertical"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content">-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/title"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textSize="20sp"-->
+<!--                    android:text="@string/recorded_audio" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/description"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:text="@string/recorded_audio" />-->
+<!--            </LinearLayout>-->
+
+<!--            &lt;!&ndash; Controls Container &ndash;&gt;-->
+<!--            -->
+<!--      -->
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="horizontal"-->
+<!--                android:gravity="center_horizontal">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="0sp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:text="0:00" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/time_text"-->
+<!--                    android:layout_width="0sp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:gravity="right"-->
+<!--                    android:text="1:00" />-->
+
+<!--            </LinearLayout>-->
+
+
+
+<!--            <LinearLayout-->
+<!--                android:layout_marginTop="20sp"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Demo" />-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/button_play_pause"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center_horizontal"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:text="@string/play_record" />-->
+
+
+
+<!--            </LinearLayout>-->
+
+
+<!--            <LinearLayout-->
+<!--                android:layout_marginTop="20sp"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="High pass" />-->
+
+
+
+<!--                <Button-->
+<!--                    android:id="@+id/button_high_pass_play"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center_horizontal"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:text="@string/play_record" />-->
+
+
+
+<!--            </LinearLayout>-->
+
+
+<!--            <LinearLayout-->
+<!--                android:layout_marginTop="20sp"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical">-->
+
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Low pass" />-->
+
+
+<!--                <Button-->
+<!--                    android:id="@+id/button_low_pass_play"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center_horizontal"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:text="@string/play_record" />-->
+
+<!--            </LinearLayout>-->
+
+
+<!--        </LinearLayout>-->
+
+
+<!--        <LinearLayout-->
+<!--            android:orientation="horizontal"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content">-->
+
+<!--            <Button-->
+<!--                android:id="@+id/button_sync_record"-->
+<!--                android:layout_margin="10dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_centerHorizontal="true"-->
+<!--                android:backgroundTint="@android:color/holo_blue_light"-->
+<!--                android:text="@string/sync_record" />-->
+
+<!--            <Button-->
+<!--                android:id="@+id/button_delete_record"-->
+<!--                android:layout_margin="10dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_centerHorizontal="true"-->
+<!--                android:backgroundTint="@android:color/holo_red_light"-->
+<!--                android:text="@string/delete_record" />-->
+
+<!--        </LinearLayout>-->
+
+
+<!--    </RelativeLayout>-->
+
+
+</FrameLayout>

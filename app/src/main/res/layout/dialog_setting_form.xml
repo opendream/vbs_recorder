@@ -1,0 +1,64 @@
+<!-- res/layout/custom_dialog.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Title"
+        android:textSize="25dp"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="@font/ibm_plex_sans_thai_semi_bold"/>
+
+    <EditText
+        android:id="@+id/input"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/ibm_plex_sans_thai_light"
+        android:hint="Enter something" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/button_cancel"
+                android:layout_marginRight="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:textColor="@color/black"
+                android:fontFamily="@font/ibm_plex_sans_thai_semi_bold"
+                android:backgroundTint="@color/colorSecondary" />
+
+            <Button
+                android:id="@+id/button_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="OK"
+                android:textColor="@color/white"
+                android:fontFamily="@font/ibm_plex_sans_thai_semi_bold" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+
+
+</LinearLayout>

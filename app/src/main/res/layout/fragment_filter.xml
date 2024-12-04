@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.FilterFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ibm_plex_sans_thai_semi_bold"
+            android:text="From"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/start_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ibm_plex_sans_thai_semi_bold"
+            android:hint="Enter start date"
+            android:inputType="none"
+            android:focusable="false"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ibm_plex_sans_thai_semi_bold"
+            android:text="To"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/end_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ibm_plex_sans_thai_semi_bold"
+            android:hint="Enter end date"
+            android:inputType="none"
+            android:focusable="false"
+            android:layout_marginBottom="16dp"/>
+
+        <Button
+            android:id="@+id/button_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/ibm_plex_sans_thai_semi_bold"
+            android:text="Apply"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+</FrameLayout>

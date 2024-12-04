@@ -1,0 +1,57 @@
+[versions]
+agp = "8.6.1"
+awsAndroidSdkS3 = "2.22.0"
+barcodeScanning = "17.3.0"
+iirj = "1.7"
+kotlin = "2.0.20"
+coreKtx = "1.13.1"
+junit = "4.13.2"
+junitVersion = "1.2.1"
+espressoCore = "3.6.1"
+appcompat = "1.7.0"
+lottie = "4.2.0"
+material = "1.12.0"
+constraintlayout = "2.1.4"
+mobileFfmpegFull = "4.4"
+navigationFragmentKtx = "2.8.2"
+navigationUiKtx = "2.8.2"
+activity = "1.9.2"
+playServicesMlkitBarcodeScanning = "18.3.1"
+roomCommon = "2.6.1"
+roomKtx = "2.6.1"
+cameraView = "1.3.4"
+cameraLifecycle = "1.3.4"
+
+[libraries]
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraView" }
+androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "cameraView" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCommon" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomCommon" }
+aws-android-sdk-core = { module = "com.amazonaws:aws-android-sdk-core", version.ref = "awsAndroidSdkS3" }
+aws-android-sdk-s3 = { module = "com.amazonaws:aws-android-sdk-s3", version.ref = "awsAndroidSdkS3" }
+barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "barcodeScanning" }
+iirj = { module = "uk.me.berndporr:iirj", version.ref = "iirj" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
+androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigationUiKtx" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-room-common = { group = "androidx.room", name = "room-common", version.ref = "roomCommon" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
+mobile-ffmpeg-full = { module = "com.arthenica:mobile-ffmpeg-full", version.ref = "mobileFfmpegFull" }
+play-services-mlkit-barcode-scanning = { module = "com.google.android.gms:play-services-mlkit-barcode-scanning", version.ref = "playServicesMlkitBarcodeScanning" }
+androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraView" }
+androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraLifecycle" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version = "2.0.20-1.0.24" }
+
+
