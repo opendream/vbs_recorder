@@ -37,7 +37,11 @@ class SettingFragment : Fragment() {
     ): View {
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
 
-        binding.settingFilePrefix.text = settingsUtil!!.getFilePrefix()
+        binding.settingFilePrefix.text = this.settingsUtil!!.getFilePrefix()
+        binding.settingFileSize.text = this.settingsUtil!!.getMaxFileSizeInMB().toString()
+        binding.settingChunkLength.text = this.settingsUtil!!.getChunkSizeMs().toString()
+        binding.settingKeepEveryNChunk.text = this.settingsUtil!!.getKeepEveryNthChunk().toString()
+
         binding.settingMetadata.text = settingsUtil!!.getMetadata()
         binding.settingUploadToS3.isChecked = settingsUtil!!.getCanUploadToS3()
 
@@ -123,6 +127,7 @@ class SettingFragment : Fragment() {
                 }
                 R.id.settingFileSize -> {
                     settingsUtil!!.setMaxFileSizeInMB(newValue.toInt())
+                    binding.settingFileSize.text = newValue
                 }
                 R.id.settingChunkLength -> {
                     settingsUtil!!.setChunkSizeMs(newValue.toInt())
