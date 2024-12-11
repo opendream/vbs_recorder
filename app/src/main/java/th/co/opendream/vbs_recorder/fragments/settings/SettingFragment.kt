@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import th.co.opendream.vbs_recorder.R
 import th.co.opendream.vbs_recorder.activities.SettingActivity
 import th.co.opendream.vbs_recorder.databinding.FragmentSettingBinding
-import th.co.opendream.vbs_recorder.utils.CommonUtil
+import th.co.opendream.vbs_recorder.utils.SettingsUtil
 
 
 class SettingFragment : Fragment() {
@@ -21,12 +21,12 @@ class SettingFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    private var commonUtil: CommonUtil? = null
+    private var settingsUtil: SettingsUtil? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        commonUtil = CommonUtil(requireContext())
+        settingsUtil = SettingsUtil(requireContext())
 
 
     }
@@ -37,14 +37,14 @@ class SettingFragment : Fragment() {
     ): View {
         _binding = FragmentSettingBinding.inflate(inflater, container, false)
 
-        binding.settingFilePrefix.text = commonUtil!!.getFilePrefix()
-        binding.settingMetadata.text = commonUtil!!.getMetadata()
-        binding.settingUploadToS3.isChecked = commonUtil!!.getCanUploadToS3()
+        binding.settingFilePrefix.text = settingsUtil!!.getFilePrefix()
+        binding.settingMetadata.text = settingsUtil!!.getMetadata()
+        binding.settingUploadToS3.isChecked = settingsUtil!!.getCanUploadToS3()
 
-        binding.settingS3Bucket.text = commonUtil!!.getS3BucketName()
-        binding.settingS3Region.text = commonUtil!!.getS3Region()
-        binding.settingS3AccessKey.text = commonUtil!!.getS3AccessKey()
-        binding.settingS3SecretKey.text = commonUtil!!.getS3SecretKey()
+        binding.settingS3Bucket.text = settingsUtil!!.getS3BucketName()
+        binding.settingS3Region.text = settingsUtil!!.getS3Region()
+        binding.settingS3AccessKey.text = settingsUtil!!.getS3AccessKey()
+        binding.settingS3SecretKey.text = settingsUtil!!.getS3SecretKey()
 
 
         binding.buttonQrScanMetadata.setOnClickListener {
@@ -64,32 +64,44 @@ class SettingFragment : Fragment() {
         }
 
         binding.settingFilePrefix.setOnClickListener {
-            showSettingTextDialog(inflater, binding.settingFilePrefix, "File Prefix", commonUtil!!.getFilePrefix())
+            showSettingTextDialog(inflater, binding.settingFilePrefix, "File Prefix", settingsUtil!!.getFilePrefix())
         }
 
+        binding.settingFileSize.setOnClickListener( {
+            showSettingTextDialog(inflater, binding.settingFileSize, "File Size", settingsUtil!!.getMaxFileSizeInMB().toString())
+        })
+
+        binding.settingChunkLength.setOnClickListener( {
+            showSettingTextDialog(inflater, binding.settingChunkLength, "Chunk Length", settingsUtil!!.getChunkSizeMs().toString())
+        })
+
+        binding.settingKeepEveryNChunk.setOnClickListener( {
+            showSettingTextDialog(inflater, binding.settingKeepEveryNChunk, "Keep Every Nth Chunk", settingsUtil!!.getKeepEveryNthChunk().toString())
+        })
+
         binding.settingUploadToS3.setOnCheckedChangeListener { _, isChecked ->
-            commonUtil!!.setUploadToS3(isChecked)
+            settingsUtil!!.setUploadToS3(isChecked)
 
         }
 
         binding.settingMetadata.setOnClickListener {
-            showSettingTextDialog(inflater, binding.settingMetadata, "Metadata", commonUtil!!.getMetadata())
+            showSettingTextDialog(inflater, binding.settingMetadata, "Metadata", settingsUtil!!.getMetadata())
         }
 
         binding.settingS3Bucket.setOnClickListener {
-            showSettingTextDialog(inflater, binding.settingS3Bucket, "S3 Bucket", commonUtil!!.getS3BucketName() ?: "")
+            showSettingTextDialog(inflater, binding.settingS3Bucket, "S3 Bucket", settingsUtil!!.getS3BucketName() ?: "")
         }
 
         binding.settingS3Region.setOnClickListener {
-            showSettingTextDialog(inflater, binding.settingS3Region, "S3 Region", commonUtil!!.getS3Region() ?: "")
+            showSettingTextDialog(inflater, binding.settingS3Region, "S3 Region", settingsUtil!!.getS3Region() ?: "")
         }
 
         binding.settingS3AccessKey.setOnClickListener {
-            showSettingTextDialog(inflater, binding.settingS3AccessKey, "S3 Access Key", commonUtil!!.getS3AccessKey() ?: "")
+            showSettingTextDialog(inflater, binding.settingS3AccessKey, "S3 Access Key", settingsUtil!!.getS3AccessKey() ?: "")
         }
 
         binding.settingS3SecretKey.setOnClickListener {
-            showSettingTextDialog(inflater, binding.settingS3SecretKey, "S3 Secret Key", commonUtil!!.getS3SecretKey() ?: "")
+            showSettingTextDialog(inflater, binding.settingS3SecretKey, "S3 Secret Key", settingsUtil!!.getS3SecretKey() ?: "")
         }
 
 
@@ -106,27 +118,38 @@ class SettingFragment : Fragment() {
         override fun onClick(v: View?) {
             when (v?.id) {
                 R.id.settingFilePrefix -> {
-                    commonUtil!!.setFilePrefix(newValue)
+                    settingsUtil!!.setFilePrefix(newValue)
                     binding.settingFilePrefix.text = newValue
                 }
+                R.id.settingFileSize -> {
+                    settingsUtil!!.setMaxFileSizeInMB(newValue.toInt())
+                }
+                R.id.settingChunkLength -> {
+                    settingsUtil!!.setChunkSizeMs(newValue.toInt())
+                    binding.settingChunkLength.text = newValue
+                }
+                R.id.settingKeepEveryNChunk -> {
+                    settingsUtil!!.setKeepEveryNthChunk(newValue.toInt())
+                    binding.settingKeepEveryNChunk.text = newValue
+                }
                 R.id.settingMetadata -> {
-                    commonUtil!!.setMetadata(newValue)
+                    settingsUtil!!.setMetadata(newValue)
                     binding.settingMetadata.text = newValue
                 }
                 R.id.settingS3Bucket -> {
-                    commonUtil!!.setS3BucketName(newValue)
+                    settingsUtil!!.setS3BucketName(newValue)
                     binding.settingS3Bucket.text = newValue
                 }
                 R.id.settingS3Region -> {
-                    commonUtil!!.setS3Region(newValue)
+                    settingsUtil!!.setS3Region(newValue)
                     binding.settingS3Region.text = newValue
                 }
                 R.id.settingS3AccessKey -> {
-                    commonUtil!!.setS3AccessKey(newValue)
+                    settingsUtil!!.setS3AccessKey(newValue)
                     binding.settingS3AccessKey.text = newValue
                 }
                 R.id.settingS3SecretKey -> {
-                    commonUtil!!.setS3SecretKey(newValue)
+                    settingsUtil!!.setS3SecretKey(newValue)
                     binding.settingS3SecretKey.text = newValue
                 }
             }

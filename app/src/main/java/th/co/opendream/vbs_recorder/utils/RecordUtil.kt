@@ -38,12 +38,12 @@ class RecordUtil {
             return output
         }
 
-        fun getFileDuration(fileSize: Long): Int {
-            val seconds = ceil(fileSize / (AudioUtil.sampleRate * 2)).toInt()
+        fun getFileDuration(fileSize: Long, sampleRate: Int): Int {
+            val seconds = ceil(fileSize / (sampleRate.toDouble() * 2)).toInt()
             return seconds
         }
 
-        fun convertPcmToWav(filePath: String, wavFilePath: String, sampleRate: Int = AudioUtil.sampleRate.toInt(), channels: Int = 1, bitDepth: Int = 16) {
+        fun convertPcmToWav(filePath: String, wavFilePath: String, sampleRate: Int, channels: Int = 1, bitDepth: Int = 16) {
             val wavFile = File(wavFilePath)
             val pcmData = FileInputStream(File(filePath)).use { it.readBytes() }
             val wavData = ByteArray(44 + pcmData.size)

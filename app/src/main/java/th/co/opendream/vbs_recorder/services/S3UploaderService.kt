@@ -24,12 +24,10 @@ import com.amazonaws.services.s3.model.ObjectMetadata
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONException
-import org.json.JSONObject
 import th.co.opendream.vbs_recorder.R
 import th.co.opendream.vbs_recorder.db.VBSDatabase
 import th.co.opendream.vbs_recorder.services.Record2Service.Companion.CHANNEL_ID
-import th.co.opendream.vbs_recorder.utils.CommonUtil
+import th.co.opendream.vbs_recorder.utils.SettingsUtil
 import th.co.opendream.vbs_recorder.utils.DateUtil
 import java.io.File
 
@@ -41,7 +39,7 @@ class S3UploaderService : Service() {
     private var record: th.co.opendream.vbs_recorder.models.Record? = null
 
     private var s3Client: AmazonS3Client? = null
-    private var commonUtil: CommonUtil? = null
+    private var settingsUtil: SettingsUtil? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -52,10 +50,10 @@ class S3UploaderService : Service() {
             "vbs_database"
         ).build()
 
-        commonUtil = CommonUtil(applicationContext)
+        settingsUtil = SettingsUtil(applicationContext)
 
-        val credentials = BasicAWSCredentials(commonUtil!!.getS3AccessKey(), commonUtil!!.getS3SecretKey())
-        val regionName = commonUtil!!.getS3Region()
+        val credentials = BasicAWSCredentials(settingsUtil!!.getS3AccessKey(), settingsUtil!!.getS3SecretKey())
+        val regionName = settingsUtil!!.getS3Region()
         if (regionName == null) {
             Log.e("S3UploaderService", "Region name is null")
             stopSelf()
@@ -90,7 +88,7 @@ class S3UploaderService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
-        val canUpload = commonUtil!!.getCanUploadToS3()
+        val canUpload = settingsUtil!!.getCanUploadToS3()
 
         if (!canUpload) {
             Log.e("S3UploaderService", "Upload to S3 is disabled")
@@ -98,7 +96,7 @@ class S3UploaderService : Service() {
             return START_NOT_STICKY
         }
 
-        val bucketName = commonUtil!!.getS3BucketName()
+        val bucketName = settingsUtil!!.getS3BucketName()
         if (bucketName == null) {
             Log.e("S3UploaderService", "Bucket name is not set")
             stopSelf()
@@ -115,7 +113,7 @@ class S3UploaderService : Service() {
                 if (fetchData.isNotEmpty()) {
 
                     record = fetchData[0]
-                    val filePath = "${record!!.filePath}${CommonUtil.AUDIO_EXTENTION}"
+                    val filePath = "${record!!.filePath}${SettingsUtil.AUDIO_EXTENTION}"
                     Log.e("S3UploaderService", "Record: $filePath")
                     uploadFileToS3(filePath, bucketName!!, filePath)
                 }
@@ -137,10 +135,12 @@ class S3UploaderService : Service() {
         Log.e("S3UploaderService", "Uploading file: $uploadFilePath")
         Log.e("S3UploaderService", "To: $syncUrl")
 
-        val metadataText = commonUtil!!.getMetadata()
+        val metadataText = settingsUtil!!.getMetadata()
         val metadata = ObjectMetadata()
 
         metadata.addUserMetadata("metadata", metadataText)
+        metadata.addUserMetadata("KeepEveryNthChunk", settingsUtil!!.getKeepEveryNthChunk().toString())
+        metadata.addUserMetadata("ChunkLength", settingsUtil!!.getChunkSizeMs().toString())
 
         val uploadObserver = transferUtility.upload(bucketName, key, file, metadata)
 

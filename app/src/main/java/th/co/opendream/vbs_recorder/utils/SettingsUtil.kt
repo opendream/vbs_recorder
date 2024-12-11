@@ -2,9 +2,8 @@ package th.co.opendream.vbs_recorder.utils
 
 import android.app.ActivityManager
 import android.content.Context
-import th.co.opendream.vbs_recorder.BuildConfig
 
-class CommonUtil(private val context: Context) {
+class SettingsUtil(private val context: Context) {
     private var sharedPreferencesUtil: SharedPreferencesUtil = SharedPreferencesUtil()
 
     fun getFilePrefix(): String {
@@ -73,25 +72,40 @@ class CommonUtil(private val context: Context) {
         )
     }
 
+    fun setSampleRate(value: Int) {
+        sharedPreferencesUtil.putInt(context, SharedPreferencesUtil.KEY_SAMPLE_RATE, value)
+    }
+    fun getSampleRate(): Int {
+        return sharedPreferencesUtil.getInt(context, SharedPreferencesUtil.KEY_SAMPLE_RATE, 44100)
+    }
+
+    fun getChunkSizeMs(): Int {
+        return sharedPreferencesUtil.getInt(context, SharedPreferencesUtil.KEY_CHUNK_SIZE_MS, 200)
+    }
+    fun setChunkSizeMs(value: Int) {
+        sharedPreferencesUtil.putInt(context, SharedPreferencesUtil.KEY_CHUNK_SIZE_MS, value)
+    }
+
+    fun getMaxFileSizeInMB(): Int {
+        return sharedPreferencesUtil.getInt(context, SharedPreferencesUtil.KEY_MAX_FILE_SIZE, 3)
+    }
+    fun setMaxFileSizeInMB(value: Int) {
+        sharedPreferencesUtil.putInt(context, SharedPreferencesUtil.KEY_MAX_FILE_SIZE, value)
+    }
+
+    fun getKeepEveryNthChunk(): Int {
+        return sharedPreferencesUtil.getInt(context, SharedPreferencesUtil.KEY_KEEP_EVERY_NTH_CHUNK, 8)
+    }
+    fun setKeepEveryNthChunk(value: Int) {
+        sharedPreferencesUtil.putInt(context, SharedPreferencesUtil.KEY_KEEP_EVERY_NTH_CHUNK, value)
+    }
+
+
 
     companion object {
         val AUDIO_PREFIX = "VBS_audio_"
 
-        val AUDIO_MINETYPE = "audio/x-wav"
         val AUDIO_EXTENTION = ".wav"
-
-        val AUDIO_SEGMENT_DURATION: Long = 10000
-        val AUDIO_FILE_SIZE_LIMIT: Long = 1 * 1024 * 1024 // 1MB
-
-        var S3_BUCKET_NAME: String = ""
-        var S3_REGION: String = ""
-        var S3_ACCESS_KEY: String = ""
-        var S3_SECRET_KEY: String = ""
-
-        fun zeroPadding (number: Int): String {
-            val paddedNumber = String.format("%05d", number)
-            return paddedNumber
-        }
 
         fun isServiceRunning(context: Context, serviceClass: Class<*>): Boolean {
             val manager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager

@@ -8,13 +8,11 @@ package th.co.opendream.vbs_recorder.processors.post
 * eg. nValue = 4, acceptedIndex = 0
 * begin with index 0, if index mod 4 == 0 then write out the chunk
 */
-class EveryNOutOneChunkPostProcessor(private val nValue: Int, private val acceptedIndex: Int = 0) : IPostAudioProcessor {
-
-    private val sampleRate = 44100
-    // each chunk is 200ms => 8820 bytes
-    private val sampleFor200msInShort = (sampleRate * 200) / 1000
-
+class EveryNOutOneChunkPostProcessor(private val sampleRate: Int, private val chunkSizeInMs: Int,
+                                     private val nValue: Int, private val acceptedIndex: Int = 0)
+    : IPostAudioProcessor {
     override fun process(input: ByteArray): ByteArray {
+        val sampleFor200msInShort = (sampleRate * chunkSizeInMs) / 1000
         val numberOfChunks = input.size / sampleFor200msInShort
         var output = ByteArray(0)
         // write out one chunk then skip by skipValue

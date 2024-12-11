@@ -30,6 +30,16 @@ class SharedPreferencesUtil {
         return getPreferences(context).getString(key, defaultValue)
     }
 
+    fun putInt(context: Context, key: String, value: Int) {
+        val editor = getPreferences(context).edit()
+        editor.putInt(key, value)
+        editor.apply()
+    }
+
+    fun getInt(context: Context, key: String, defaultValue: Int = 0): Int {
+        return getPreferences(context).getInt(key, defaultValue)
+    }
+
     companion object {
         val KEY_FILE_PREFIX = "FILE_PREFIX"
 
@@ -41,6 +51,10 @@ class SharedPreferencesUtil {
         val KEY_CAN_UPLOAD_TO_S3 = "CAN_UPLOAD_TO_S3"
         val KEY_METADATA = "METADATA"
 
+        val KEY_SAMPLE_RATE = "SAMPLE_RATE"
+        val KEY_CHUNK_SIZE_MS = "CHUNK_SIZE_MS"
+        val KEY_MAX_FILE_SIZE = "MAX_FILE_SIZE"
+        val KEY_KEEP_EVERY_NTH_CHUNK = "KEEP_EVERY_NTH_CHUNK"
     }
 
 }

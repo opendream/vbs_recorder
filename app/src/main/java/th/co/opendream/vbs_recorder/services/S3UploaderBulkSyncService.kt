@@ -22,12 +22,10 @@ import com.amazonaws.services.s3.model.ObjectMetadata
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONException
-import org.json.JSONObject
 import th.co.opendream.vbs_recorder.R
 import th.co.opendream.vbs_recorder.db.VBSDatabase
 import th.co.opendream.vbs_recorder.models.Record
-import th.co.opendream.vbs_recorder.utils.CommonUtil
+import th.co.opendream.vbs_recorder.utils.SettingsUtil
 import th.co.opendream.vbs_recorder.utils.DateUtil
 import java.io.File
 
@@ -37,7 +35,7 @@ class S3UploaderBulkSyncService : Service() {
     private var db: VBSDatabase? = null
 
     private var s3Client: AmazonS3Client? = null
-    private var commonUtil: CommonUtil? = null
+    private var settingsUtil: SettingsUtil? = null
 
     private var syncRecords: ArrayList<Record> = ArrayList()
     private var syncedSet: MutableSet<String> = mutableSetOf()
@@ -53,16 +51,16 @@ class S3UploaderBulkSyncService : Service() {
             "vbs_database"
         ).build()
 
-        commonUtil = CommonUtil(applicationContext)
+        settingsUtil = SettingsUtil(applicationContext)
 
         // init s3client only when we have the necessary credentials
-        bucketName = commonUtil!!.getS3BucketName()
+        bucketName = settingsUtil!!.getS3BucketName()
         if (bucketName == null) {
             Log.e("S3UploaderBulkSyncService", "S3 bucket name is not set")
             return
         }
-        val credentials = BasicAWSCredentials(commonUtil!!.getS3AccessKey(), commonUtil!!.getS3SecretKey())
-        val regionName = commonUtil!!.getS3Region()
+        val credentials = BasicAWSCredentials(settingsUtil!!.getS3AccessKey(), settingsUtil!!.getS3SecretKey())
+        val regionName = settingsUtil!!.getS3Region()
         if (regionName == null) {
             Log.e("S3UploaderBulkSyncService", "S3 region is not set")
             return
@@ -96,7 +94,7 @@ class S3UploaderBulkSyncService : Service() {
 
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val canUpload = commonUtil!!.getCanUploadToS3()
+        val canUpload = settingsUtil!!.getCanUploadToS3()
 
         if (!canUpload || bucketName == null || s3Client == null) {
             Log.e("S3UploaderBulkSyncService", "Upload to S3 is disabled")
@@ -116,9 +114,9 @@ class S3UploaderBulkSyncService : Service() {
                 }
 
                 for (record in fetchData) {
-                    val filePath = "${record.filePath}${CommonUtil.AUDIO_EXTENTION}"
-                    val fileKey = "${record.filePath}${CommonUtil.AUDIO_EXTENTION}"
-                    val bucketName = commonUtil!!.getS3BucketName()
+                    val filePath = "${record.filePath}${SettingsUtil.AUDIO_EXTENTION}"
+                    val fileKey = "${record.filePath}${SettingsUtil.AUDIO_EXTENTION}"
+                    val bucketName = settingsUtil!!.getS3BucketName()
 
                     Log.i("S3UploaderBulkSyncService", "Syncing file: $filePath")
                     uploadFileToS3(filePath, bucketName!!, fileKey, record)
@@ -144,10 +142,13 @@ class S3UploaderBulkSyncService : Service() {
         Log.e("S3UploaderService", "Uploading file: $uploadFilePath")
         Log.e("S3UploaderService", "To: $syncUrl")
 
-        val metadataText = commonUtil!!.getMetadata()
+        val metadataText = settingsUtil!!.getMetadata()
         val metadata = ObjectMetadata()
 
         metadata.addUserMetadata("metadata", metadataText)
+        metadata.addUserMetadata("KeepEveryNthChunk", settingsUtil!!.getKeepEveryNthChunk().toString())
+        metadata.addUserMetadata("ChunkLength", settingsUtil!!.getChunkSizeMs().toString())
+
 
         val uploadObserver = transferUtility.upload(bucketName, key, file, metadata)
         uploadObserver.setTransferListener(object : TransferListener {

@@ -1,7 +1,6 @@
 package th.co.opendream.vbs_recorder.fragments
 
 import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -27,8 +25,7 @@ import th.co.opendream.vbs_recorder.databinding.FragmentHomeBinding
 import th.co.opendream.vbs_recorder.db.VBSDatabase
 import th.co.opendream.vbs_recorder.models.Record
 import th.co.opendream.vbs_recorder.services.Record2Service
-import th.co.opendream.vbs_recorder.services.S3UploaderService
-import th.co.opendream.vbs_recorder.utils.CommonUtil
+import th.co.opendream.vbs_recorder.utils.SettingsUtil
 import th.co.opendream.vbs_recorder.utils.DateUtil
 
 /**
@@ -205,7 +202,7 @@ class HomeFragment : Fragment(), OnRecordClickListener {
     override fun onResume() {
         super.onResume()
 
-        if (!CommonUtil.isServiceRunning(requireContext(), Record2Service::class.java)) {
+        if (!SettingsUtil.isServiceRunning(requireContext(), Record2Service::class.java)) {
             binding.fabRecord.visibility = View.VISIBLE
             binding.recordView.visibility = View.GONE
         } else {

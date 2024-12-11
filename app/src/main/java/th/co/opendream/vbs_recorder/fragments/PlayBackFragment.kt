@@ -21,7 +21,6 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.room.Room
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +31,7 @@ import th.co.opendream.vbs_recorder.activities.MainActivity
 import th.co.opendream.vbs_recorder.databinding.FragmentPlayBackBinding
 import th.co.opendream.vbs_recorder.db.VBSDatabase
 import th.co.opendream.vbs_recorder.services.S3UploaderService
-import th.co.opendream.vbs_recorder.utils.CommonUtil
+import th.co.opendream.vbs_recorder.utils.SettingsUtil
 import th.co.opendream.vbs_recorder.utils.DateUtil
 import java.util.Date
 import java.util.Timer
@@ -138,19 +137,6 @@ class PlayBackFragment : Fragment() {
             showDeleteDialog(inflater, binding.root)
         }
 
-        binding.buttonHighPassPlay.setOnClickListener {
-            generateTransformedFile("high")
-
-            Snackbar.make(binding.root, "High pass filter file generated...", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
-
-        binding.buttonLowPassPlay.setOnClickListener {
-            generateTransformedFile("low")
-
-            Snackbar.make(binding.root, "Low pass filter file generated...", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
 
         binding.buttonSyncRecord.setOnClickListener {
             showSyncedDialog(inflater, binding.root)
@@ -161,12 +147,7 @@ class PlayBackFragment : Fragment() {
                 mediaPlayer?.seekTo(mediaPlayer!!.currentPosition + SKIP_MEDIA_PLAYER_MS)
 
                 refreshMediaPlayerControl(true)
-
-//                Snackbar.make(binding.root, ">> ${SKIP_MEDIA_PLAYER_MS/1000}s", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show()
             }
-
-
         }
 
         binding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -228,19 +209,6 @@ class PlayBackFragment : Fragment() {
         }
 
         return binding.root
-
-    }
-
-    private fun generateTransformedFile(transformType: String) {
-        val bundle = Bundle().apply {
-            putInt("record_id", record!!.id)
-            putString("transform_type", transformType)
-        }
-
-        findNavController().navigate(
-            R.id.action_PlayBackFragment_to_AudioFilterFragment,
-            bundle
-        )
 
     }
 
@@ -398,10 +366,10 @@ class PlayBackFragment : Fragment() {
             db!!.recordDao().getById(recordId).observe(viewLifecycleOwner, { record ->
                 this.record = record
 
-                recordPath = "${record.filePath!!}${CommonUtil.AUDIO_EXTENTION}"
+                recordPath = "${record.filePath!!}${SettingsUtil.AUDIO_EXTENTION}"
                 if (record.highPassFilePath != null) {
                     highPassRecordPath =
-                        "${record.highPassFilePath}${CommonUtil.AUDIO_EXTENTION}"
+                        "${record.highPassFilePath}${SettingsUtil.AUDIO_EXTENTION}"
 
                     binding.badgeRecordHighPass.visibility = View.VISIBLE
 
@@ -411,7 +379,7 @@ class PlayBackFragment : Fragment() {
 
                 if (record.lowPassFilePath != null) {
                     lowPassRecordPath =
-                        "${record.lowPassFilePath}${CommonUtil.AUDIO_EXTENTION}"
+                        "${record.lowPassFilePath}${SettingsUtil.AUDIO_EXTENTION}"
                     binding.badgeRecordLowPass.visibility = View.VISIBLE
                 }
 
@@ -471,7 +439,6 @@ class PlayBackFragment : Fragment() {
         super.onResume()
 
         (activity as MainActivity).changeToolbarTitle("Playback")
-
         requireContext().registerReceiver(uploadCompleteReceiver, IntentFilter("UPLOAD_COMPLETED"))
     }
 

@@ -23,7 +23,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import th.co.opendream.vbs_recorder.activities.SettingActivity
 import th.co.opendream.vbs_recorder.databinding.FragmentQrScannerBinding
-import th.co.opendream.vbs_recorder.utils.CommonUtil
+import th.co.opendream.vbs_recorder.utils.SettingsUtil
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -37,13 +37,13 @@ class QrScannerFragment : Fragment() {
     private var isShowDialog = false
     private var isDone = false
 
-    private var commonUtil: CommonUtil? = null
+    private var settingsUtil: SettingsUtil? = null
     private var settingKey: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        commonUtil = CommonUtil(requireContext())
+        settingsUtil = SettingsUtil(requireContext())
 
     }
 
@@ -138,7 +138,7 @@ class QrScannerFragment : Fragment() {
                 isDone = true
 
                 if (settingKey == "metadata") {
-                    commonUtil!!.setMetadata(qrCode)
+                    settingsUtil!!.setMetadata(qrCode)
 
                     onBackPressed()
 
@@ -154,10 +154,10 @@ class QrScannerFragment : Fragment() {
                     if (isJson) {
                         try {
                             val jsonObject = JSONObject(qrCode)
-                            commonUtil!!.setS3BucketName(jsonObject.getString("bucket"))
-                            commonUtil!!.setS3Region(jsonObject.getString("region"))
-                            commonUtil!!.setS3AccessKey(jsonObject.getString("access_key"))
-                            commonUtil!!.setS3SecretKey(jsonObject.getString("secret_key"))
+                            settingsUtil!!.setS3BucketName(jsonObject.getString("bucket"))
+                            settingsUtil!!.setS3Region(jsonObject.getString("region"))
+                            settingsUtil!!.setS3AccessKey(jsonObject.getString("access_key"))
+                            settingsUtil!!.setS3SecretKey(jsonObject.getString("secret_key"))
 
                             onBackPressed()
                             return@setPositiveButton

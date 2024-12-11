@@ -12,7 +12,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import th.co.opendream.vbs_recorder.db.VBSDatabase
 import th.co.opendream.vbs_recorder.processors.post.EveryNOutOneChunkPostProcessor
-import th.co.opendream.vbs_recorder.utils.CommonUtil
+import th.co.opendream.vbs_recorder.utils.SettingsUtil
 import th.co.opendream.vbs_recorder.utils.RecordUtil
 import java.io.File
 import java.io.FileInputStream
@@ -28,6 +28,7 @@ class RecordProcessorService : Service(), RecordProcessorServiceListener {
     private var displayName: String? = null
 
     private var db: VBSDatabase? = null
+    private lateinit var settingsUtil: SettingsUtil;
 
     override fun onBind(intent: Intent): IBinder? {
         return null
@@ -35,6 +36,8 @@ class RecordProcessorService : Service(), RecordProcessorServiceListener {
 
     override fun onCreate() {
         super.onCreate()
+
+        settingsUtil = SettingsUtil(this)
 
         db = Room.databaseBuilder(
             applicationContext,
@@ -47,7 +50,7 @@ class RecordProcessorService : Service(), RecordProcessorServiceListener {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val it = intent?.getStringExtra(EXTRA_MEDIA_DISPLAY_NAME)
         it?.let {
-            val filePath = readAudioFileFromMediaStore(contentResolver, "${it}${CommonUtil.AUDIO_EXTENTION}")
+            val filePath = readAudioFileFromMediaStore(contentResolver, "${it}${SettingsUtil.AUDIO_EXTENTION}")
             if (filePath.isNullOrEmpty() || filePath == "") {
                 Log.e(TAG, "File not found: $it")
                 stopSelf()
@@ -73,8 +76,12 @@ class RecordProcessorService : Service(), RecordProcessorServiceListener {
         val inputFilePath = filePath!!
         val outputFile = File.createTempFile("filtered_${displayName}", ".wav")
 
+        val sampleRate = settingsUtil.getSampleRate()
+        val chunkSizeInMs = settingsUtil.getChunkSizeMs()
+        val keepEveryNthChunk = settingsUtil.getKeepEveryNthChunk()
+
         //val processor: IPostAudioProcessor = PassThroughPostProcessor()
-        val processor = EveryNOutOneChunkPostProcessor(4)
+        val processor = EveryNOutOneChunkPostProcessor(sampleRate, chunkSizeInMs, keepEveryNthChunk)
 
         // val processor: AudioProcessor2 = SilenceProcessor()
         var numberOfOutputBytes: Long = 0
@@ -101,7 +108,7 @@ class RecordProcessorService : Service(), RecordProcessorServiceListener {
             Log.e(TAG, "Found ${fetchData.size} records")
             if (fetchData.isNotEmpty()) {
                 for (record in fetchData) {
-                    record.duration = RecordUtil.getFileDuration(numberOfOutputBytes)
+                    record.duration = RecordUtil.getFileDuration(numberOfOutputBytes, sampleRate)
                     db!!.recordDao().update(record)
                 }
             }

@@ -17,7 +17,7 @@ import th.co.opendream.vbs_recorder.activities.MainActivity
 import th.co.opendream.vbs_recorder.databinding.FragmentRecordBinding
 import th.co.opendream.vbs_recorder.db.VBSDatabase
 import th.co.opendream.vbs_recorder.services.Record2Service
-import th.co.opendream.vbs_recorder.utils.CommonUtil
+import th.co.opendream.vbs_recorder.utils.SettingsUtil
 import th.co.opendream.vbs_recorder.utils.DateUtil
 import java.util.Date
 import java.util.Timer
@@ -38,7 +38,7 @@ class RecordFragment : Fragment() {
     private var recordServiceIntent: Intent? = null
 
     private var db: VBSDatabase? = null
-    private var commonUtil: CommonUtil? = null
+    private var settingsUtil: SettingsUtil? = null
     private var timer: Timer? = null
 
     var isRecording = false
@@ -48,7 +48,7 @@ class RecordFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        commonUtil = CommonUtil(requireContext())
+        settingsUtil = SettingsUtil(requireContext())
 
     }
 
@@ -126,9 +126,9 @@ class RecordFragment : Fragment() {
             val now = Date()
             val title = "${DateUtil.formatLocaleDateTitle(now)} at ${DateUtil.formatLocaleTimeTitle(now)}"
 
-            var prefix = CommonUtil.AUDIO_PREFIX
-            if (commonUtil!!.getFilePrefix() != "") {
-                prefix = commonUtil!!.getFilePrefix()
+            var prefix = SettingsUtil.AUDIO_PREFIX
+            if (settingsUtil!!.getFilePrefix() != "") {
+                prefix = settingsUtil!!.getFilePrefix()
             }
 
             val output = "${prefix}${DateUtil.formatLocaleDateTimeFile(Date())}"
@@ -215,7 +215,7 @@ class RecordFragment : Fragment() {
 
         }
 
-        if (!CommonUtil.isServiceRunning(requireContext(), Record2Service::class.java)) {
+        if (!SettingsUtil.isServiceRunning(requireContext(), Record2Service::class.java)) {
             binding.buttonRecord.text = "Start Recording"
             isRecording = false
 

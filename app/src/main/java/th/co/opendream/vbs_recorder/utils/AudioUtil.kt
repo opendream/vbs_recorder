@@ -144,9 +144,6 @@ class AudioUtil {
     }
 
     companion object {
-        val sampleRate: Double = 44100.0
-        val bitRate: Int = 128000
-        val bufferSize: Int = 1152
     }
 
 }

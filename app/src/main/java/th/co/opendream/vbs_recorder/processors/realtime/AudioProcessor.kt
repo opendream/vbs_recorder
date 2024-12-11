@@ -48,7 +48,7 @@ class AudioProcessor(
     private val contentResolver: ContentResolver,
     private val sampleRate: Int,
     private val baseFilePath: String,
-    private val maxFileSize: Int = 3 * 1024 * 1024, // 3 MB
+    private val maxFileSize: Int,
     private val onSave: OnSaveCallback? = null
 ) {
     companion object {
@@ -88,7 +88,7 @@ class AudioProcessor(
         val newFilePath = filePath!!.replace(".pcm", ".wav")
         val newName = name.replace(".pcm", ".wav")
 
-        RecordUtil.convertPcmToWav(filePath!!, newFilePath)
+        RecordUtil.convertPcmToWav(filePath!!, newFilePath, sampleRate)
         Log.i(TAG, "Converted file to WAV: $newFilePath")
 
         val nameWithoutExtension = newName.substringBeforeLast(".wav")

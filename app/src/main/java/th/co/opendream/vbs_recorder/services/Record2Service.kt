@@ -23,7 +23,7 @@ import th.co.opendream.vbs_recorder.R
 import th.co.opendream.vbs_recorder.activities.MainActivity
 import th.co.opendream.vbs_recorder.db.VBSDatabase
 import th.co.opendream.vbs_recorder.processors.realtime.AudioProcessor
-import th.co.opendream.vbs_recorder.utils.CommonUtil
+import th.co.opendream.vbs_recorder.utils.SettingsUtil
 
 class Record2Service : Service() {
 
@@ -34,13 +34,22 @@ class Record2Service : Service() {
     private var isRecording = false
     private lateinit var audioProcessor: AudioProcessor
 
-    val sampleRate = 44100
-    val channelConfig = AudioFormat.CHANNEL_IN_MONO
-    val audioFormat = AudioFormat.ENCODING_PCM_16BIT
-    val sampleFor200msInShort = (sampleRate * 200) / 1000   // 8820 = 44100 * 200 / 1000
+    private var sampleRate = 44100
+    private val channelConfig = AudioFormat.CHANNEL_IN_MONO
+    private val audioFormat = AudioFormat.ENCODING_PCM_16BIT
+    private var sampleFor200msInShort = (sampleRate * 200) / 1000   // 8820 = 44100 * 200 / 1000
+    private var maxFileSize = 3 * 1024 * 1024 // 3 MB
 
     override fun onCreate() {
         super.onCreate()
+        val settingsUtil = SettingsUtil(applicationContext)
+
+        sampleRate = settingsUtil.getSampleRate()
+        val chunkInMs = settingsUtil.getChunkSizeMs()
+        sampleFor200msInShort = (sampleRate * chunkInMs) / 1000
+        val maxFileSizeInMB = settingsUtil.getMaxFileSizeInMB()
+        maxFileSize = maxFileSizeInMB * 1024 * 1024
+
         db = Room.databaseBuilder(
             applicationContext,
             VBSDatabase::class.java,
@@ -86,7 +95,7 @@ class Record2Service : Service() {
 
         isRecording = true
         recorder.startRecording()
-        val filePrefix = CommonUtil(applicationContext).getFilePrefix()
+        val filePrefix = SettingsUtil(applicationContext).getFilePrefix()
         serviceScope.launch {
             audioProcessor = AudioProcessor(
                 db = db,
@@ -96,7 +105,8 @@ class Record2Service : Service() {
                 onSave = fun(nameInMediaStore: String) {
                     Log.i(TAG, "Saved file: $nameInMediaStore")
                     onPostFileCreated(nameInMediaStore)
-                }
+                },
+                maxFileSize = maxFileSize
             )
             var offsetInShorts = 0
             val bufferInShort = ShortArray(bufferSizeInBytes / 2)
