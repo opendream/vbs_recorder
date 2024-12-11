@@ -34,26 +34,13 @@
         android:id="@+id/PlayBackFragment"
         android:name="th.co.opendream.vbs_recorder.fragments.PlayBackFragment"
         android:label="@string/playback_fragment_label"
-        tools:layout="@layout/fragment_play_back">
-
-        <action
-            android:id="@+id/action_PlayBackFragment_to_AudioFilterFragment"
-            app:destination="@id/AudioFilterFragment" />
-
-    </fragment>
+        tools:layout="@layout/fragment_play_back"/>
 
     <fragment
         android:id="@+id/FilterFragment"
         android:name="th.co.opendream.vbs_recorder.fragments.FilterFragment"
         android:label="@string/filter_fragment_label"
         tools:layout="@layout/fragment_filter">
-    </fragment>
-
-    <fragment
-        android:id="@+id/AudioFilterFragment"
-        android:name="th.co.opendream.vbs_recorder.fragments.audio.TransformFragment"
-        android:label="@string/audio_filter_fragment_label"
-        tools:layout="@layout/fragment_audio_transform">
     </fragment>
 
     <action
