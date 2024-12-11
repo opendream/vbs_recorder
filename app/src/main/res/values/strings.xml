@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MSR</string>
+    <string name="app_name">mosq record</string>
     <string name="app_full_name">Mosquito Sound Recorder</string>
 
     <string name="action_settings">Settings</string>
