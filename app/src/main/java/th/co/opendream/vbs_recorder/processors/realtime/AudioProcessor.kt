@@ -36,7 +36,6 @@ class AudioProcessor(
     private var chunkProcessor: IChunkProcessor = ChunkProcessorComposer(
         listOf(
             PassthroughProcessor(),
-//            RandomDropProcessor(0.1f),
 //            ButterworthFilterProcessor(sampleRate, 300.0, 2),
 //            RescaleProcessor(),
         )
