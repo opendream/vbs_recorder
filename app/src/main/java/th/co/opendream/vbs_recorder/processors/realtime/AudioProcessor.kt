@@ -31,7 +31,7 @@ class AudioProcessor(
     private val sampleRate: Int,
     private val maxFileSize: Int,
     private val onSave: OnSaveCallback? = null,
-) {
+) : IAudioProcessor {
     companion object {
         const val TAG = "AudioProcessor"
     }
@@ -49,11 +49,11 @@ class AudioProcessor(
         fileWriter.createNewFile()
     }
 
-    fun close() {
+    override fun close() {
         fileWriter.close()
     }
 
-    suspend fun processAudioChunk(buffer: ShortArray, size: Int) {
+    override suspend fun processAudioChunk(buffer: ShortArray, size: Int) {
         val processBuffer = buffer.copyOf(size)
         val filteredData = chunkProcessor.processChunk(processBuffer)
 

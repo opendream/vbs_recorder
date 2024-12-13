@@ -17,19 +17,20 @@ import androidx.room.Room
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import th.co.opendream.vbs_recorder.R
 import th.co.opendream.vbs_recorder.activities.MainActivity
 import th.co.opendream.vbs_recorder.db.VBSDatabase
 import th.co.opendream.vbs_recorder.processors.PcmToWavFileConverter
 import th.co.opendream.vbs_recorder.processors.realtime.AudioProcessor
+import th.co.opendream.vbs_recorder.processors.realtime.AudioRecorderProcessor
 import th.co.opendream.vbs_recorder.processors.realtime.AudioRepository
 import th.co.opendream.vbs_recorder.processors.realtime.FileWriter
 import th.co.opendream.vbs_recorder.utils.SettingsUtil
 
 class Record2Service : Service() {
 
+    private lateinit var audioRecorderProcessor: AudioRecorderProcessor
     private lateinit var recorder: AudioRecord
     private lateinit var db: VBSDatabase
     private val serviceJob = Job()
@@ -108,40 +109,36 @@ class Record2Service : Service() {
             sampleRate = sampleRate
         )
 
-        serviceScope.launch {
-            audioProcessor = AudioProcessor(
-                audioRepository = audioRepository,
-                sampleRate = sampleRate,
-                fileWriter = fileWriter,
-                onSave = fun(nameInMediaStore: String) {
-                    Log.i(TAG, "Saved file: $nameInMediaStore")
-                    onPostFileCreated(nameInMediaStore)
-                },
-                maxFileSize = maxFileSize
-            )
-            var offsetInShorts = 0
-            val bufferInShort = ShortArray(bufferSizeInBytes / 2)
-            while (isActive && recorder.recordingState == AudioRecord.RECORDSTATE_RECORDING) {
-                val remaining = bufferInShort.size - offsetInShorts
-                val shortsRead = recorder.read(bufferInShort, offsetInShorts, remaining)
-                if (shortsRead > 0) {
-                    offsetInShorts += shortsRead
+        audioProcessor = AudioProcessor(
+            audioRepository = audioRepository,
+            sampleRate = sampleRate,
+            fileWriter = fileWriter,
+            onSave = fun(nameInMediaStore: String) {
+                Log.i(TAG, "Saved file: $nameInMediaStore")
+                onPostFileCreated(nameInMediaStore)
+            },
+            maxFileSize = maxFileSize
+        )
 
-                    if (offsetInShorts >= sampleFor200msInShort) {
-                        audioProcessor.processAudioChunk(bufferInShort, sampleFor200msInShort)
-                        val leftOver = offsetInShorts - sampleFor200msInShort
-                        if (leftOver > 0) {
-                            System.arraycopy(bufferInShort, sampleFor200msInShort, bufferInShort, 0, leftOver)
-                            offsetInShorts = leftOver
-                        } else {
-                            offsetInShorts = 0
-                        }
-                    }
-                } else {
-                    handleAudioRecordError(shortsRead)
-                }
-            }
-        }
+        audioRecorderProcessor = AudioRecorderProcessor(
+            isActive = ::isActive,
+            recordState = ::recordState,
+            readFromRecorder = recorder::read,
+            audioProcessor = audioProcessor,
+            bufferSizeInBytes = bufferSizeInBytes,
+            sampleFor200msInShort = sampleFor200msInShort,
+            handleAudioRecordError = ::handleAudioRecordError
+        )
+
+        audioRecorderProcessor.startRecording(serviceScope)
+    }
+
+    private fun isActive(): Boolean {
+        return isRecording
+    }
+
+    private fun recordState(): Int {
+        return recorder.recordingState
     }
 
     private fun stopRecording() {
@@ -224,26 +221,3 @@ class Record2Service : Service() {
         const val CHANNEL_ID = "th.co.opendream.vbs_recorder.NotificationServiceChannel"
     }
 }
-
-/*
- for overlapping audio chunks
- class OverlappingAudioProcessor {
-    private val overlap = 0.5 // 50% overlap
-    private var previousBuffer: ShortArray? = null
-
-    private fun processWithOverlap(buffer: ShortArray, size: Int) {
-        previousBuffer?.let { previous ->
-            // Combine previous and current buffers for overlapped processing
-            val combined = ShortArray(previous.size + size)
-            System.arraycopy(previous, 0, combined, 0, previous.size)
-            System.arraycopy(buffer, 0, combined, previous.size, size)
-
-            // Process overlapped data
-            processOverlappedChunk(combined)
-        }
-
-        // Save current buffer for next overlap
-        previousBuffer = buffer.copyOf(size)
-    }
-}
- */
