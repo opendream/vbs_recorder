@@ -6,6 +6,7 @@ iirj = "1.7"
 kotlin = "2.0.20"
 coreKtx = "1.13.1"
 junit = "4.13.2"
+mockito = "4.0.0"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
@@ -33,6 +34,7 @@ aws-android-sdk-s3 = { module = "com.amazonaws:aws-android-sdk-s3", version.ref 
 barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "barcodeScanning" }
 iirj = { module = "uk.me.berndporr:iirj", version.ref = "iirj" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+mockito-core = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }

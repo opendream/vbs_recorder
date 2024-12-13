@@ -22,7 +22,10 @@ import kotlinx.coroutines.launch
 import th.co.opendream.vbs_recorder.R
 import th.co.opendream.vbs_recorder.activities.MainActivity
 import th.co.opendream.vbs_recorder.db.VBSDatabase
+import th.co.opendream.vbs_recorder.processors.PcmToWavFileConverter
 import th.co.opendream.vbs_recorder.processors.realtime.AudioProcessor
+import th.co.opendream.vbs_recorder.processors.realtime.AudioRepository
+import th.co.opendream.vbs_recorder.processors.realtime.FileWriter
 import th.co.opendream.vbs_recorder.utils.SettingsUtil
 
 class Record2Service : Service() {
@@ -96,12 +99,20 @@ class Record2Service : Service() {
         isRecording = true
         recorder.startRecording()
         val filePrefix = SettingsUtil(applicationContext).getFilePrefix()
+        val fileWriter = FileWriter(externalCacheDir?.absolutePath!! + "/" + filePrefix)
+        val pcmToWavFileConverter = PcmToWavFileConverter()
+        val audioRepository = AudioRepository(
+            db = db,
+            contentResolver = contentResolver,
+            pcmToWavFileConverter = pcmToWavFileConverter,
+            sampleRate = sampleRate
+        )
+
         serviceScope.launch {
             audioProcessor = AudioProcessor(
-                db = db,
-                contentResolver = contentResolver,
+                audioRepository = audioRepository,
                 sampleRate = sampleRate,
-                baseFilePath = externalCacheDir?.absolutePath!! + "/" + filePrefix,
+                fileWriter = fileWriter,
                 onSave = fun(nameInMediaStore: String) {
                     Log.i(TAG, "Saved file: $nameInMediaStore")
                     onPostFileCreated(nameInMediaStore)
@@ -139,7 +150,7 @@ class Record2Service : Service() {
         recorder.stop()
         recorder.release()
         CoroutineScope(Dispatchers.IO).launch {
-            audioProcessor.closeCurrentFile()
+            audioProcessor.close()
         }
     }
 
