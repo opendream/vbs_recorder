@@ -7,7 +7,7 @@ import java.io.RandomAccessFile
 import java.util.Date
 
 class FileWriter(private val baseFilePath: String) : IFileWriter {
-    private var filePath: String? = null
+    var filePath: String? = null
     private lateinit var currentFile: RandomAccessFile
     private var fileIndex = Date().time
     private var currentFileSize = 0

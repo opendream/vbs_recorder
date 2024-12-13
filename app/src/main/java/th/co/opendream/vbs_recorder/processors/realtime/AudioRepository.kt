@@ -7,14 +7,14 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import th.co.opendream.vbs_recorder.db.VBSDatabase
-import th.co.opendream.vbs_recorder.processors.PcmToWavFileConverter
+import th.co.opendream.vbs_recorder.processors.IPcmToWavFileConverter
 import th.co.opendream.vbs_recorder.utils.DateUtil
 import java.io.File
 import kotlin.math.ceil
 
 class AudioRepository(private val db: VBSDatabase,
                       private val contentResolver: ContentResolver,
-                      private val pcmToWavFileConverter: PcmToWavFileConverter,
+                      private val pcmToWavFileConverter: IPcmToWavFileConverter,
                       private val sampleRate: Int) : IAudioRepository {
 
     companion object {
