@@ -1,6 +1,5 @@
 package th.co.opendream.vbs_recorder.processors.realtime
 
-import android.util.Log
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
@@ -33,9 +32,6 @@ class AudioProcessor(
     private val maxFileSize: Int,
     private val onSave: OnSaveCallback? = null,
 ) : IAudioProcessor {
-    companion object {
-        const val TAG = "AudioProcessor"
-    }
 
     private var chunkProcessor: IChunkProcessor = ChunkProcessorComposer(
         listOf(
@@ -71,7 +67,6 @@ class AudioProcessor(
 
         // Write to file with size management
         val currentFileSize = fileWriter.write(byteBuffer.array())
-        Log.d(TAG, "Current file size: $currentFileSize")
 
         if (currentFileSize >= maxFileSize) {
             val filePath = fileWriter.switchToNextFile()

@@ -1,7 +1,6 @@
 package th.co.opendream.vbs_recorder.processors.realtime
 
 import android.media.AudioRecord
-import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -19,7 +18,6 @@ class AudioRecorderProcessor(
         return scope.launch {
             var offsetInShorts = 0
             val bufferInShort = ShortArray(bufferSizeInBytes / 2)
-            Log.d(TAG, "Start recording")
             while (isActive() && recordState() == AudioRecord.RECORDSTATE_RECORDING) {
                 val remaining = bufferInShort.size - offsetInShorts
                 val shortsRead = readFromRecorder(bufferInShort, offsetInShorts, remaining)
@@ -42,9 +40,5 @@ class AudioRecorderProcessor(
             }
 
         }
-    }
-
-    companion object {
-        const val TAG = "AudioRecorderProcessor"
     }
 }
