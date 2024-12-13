@@ -10,6 +10,7 @@ import android.content.Intent
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
+import android.os.Binder
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -28,6 +29,7 @@ import th.co.opendream.vbs_recorder.processors.realtime.AudioRepository
 import th.co.opendream.vbs_recorder.processors.realtime.FileWriter
 import th.co.opendream.vbs_recorder.utils.SettingsUtil
 
+
 class Record2Service : Service() {
 
     private lateinit var audioRecorderProcessor: AudioRecorderProcessor
@@ -37,11 +39,13 @@ class Record2Service : Service() {
     private val serviceScope = CoroutineScope(Dispatchers.IO + serviceJob)
     private var isRecording = false
     private lateinit var audioProcessor: AudioProcessor
+    private val mBinder: IBinder = LocalBinder()
 
     private var sampleRate = 44100
     private val channelConfig = AudioFormat.CHANNEL_IN_MONO
     private val audioFormat = AudioFormat.ENCODING_PCM_16BIT
     private var sampleFor200msInShort: Int = 0
+    private var chunkSizeInMillisec: Int = 0
     private var maxFileSize = 3 * 1024 * 1024 // 3 MB
 
     override fun onCreate() {
@@ -49,8 +53,8 @@ class Record2Service : Service() {
         val settingsUtil = SettingsUtil(applicationContext)
 
         sampleRate = settingsUtil.getSampleRate()
-        val chunkInMs = settingsUtil.getChunkSizeMs()
-        sampleFor200msInShort = (sampleRate * chunkInMs) / 1000
+        chunkSizeInMillisec = settingsUtil.getChunkSizeMs()
+        sampleFor200msInShort = (sampleRate * chunkSizeInMillisec) / 1000
         val maxFileSizeInMB = settingsUtil.getMaxFileSizeInMB()
         maxFileSize = maxFileSizeInMB * 1024 * 1024
 
@@ -69,7 +73,7 @@ class Record2Service : Service() {
     }
 
     @SuppressLint("MissingPermission")
-    private fun startRecording() {
+    public fun startRecording() {
         // The value can vary depending on the device, but it is typically around 3584 bytes.
         val minBuffSizeInBytes = AudioRecord.getMinBufferSize(
             sampleRate,
@@ -141,7 +145,7 @@ class Record2Service : Service() {
         return recorder.recordingState
     }
 
-    private fun stopRecording() {
+    public fun stopRecording() {
         isRecording = false
         serviceJob.cancel()
         recorder.stop()
@@ -170,7 +174,7 @@ class Record2Service : Service() {
     }
 
     override fun onBind(p0: Intent?): IBinder? {
-        return null
+        return mBinder
     }
 
     override fun onDestroy() {
@@ -213,6 +217,31 @@ class Record2Service : Service() {
         val manager = getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(serviceChannel)
 
+    }
+
+    inner class LocalBinder : Binder() {
+        fun getService(): Record2Service
+        {
+            return this@Record2Service
+        }
+    }
+
+    // for unit testing
+    // getter for sampleRate
+    fun getSampleRate(): Int {
+        return sampleRate
+    }
+
+    fun getSampleFor200msInShort(): Int {
+        return sampleFor200msInShort
+    }
+
+    fun getChunkSizeMs(): Int {
+        return chunkSizeInMillisec
+    }
+
+    fun getMaxFileSize(): Int {
+        return maxFileSize
     }
 
     companion object {

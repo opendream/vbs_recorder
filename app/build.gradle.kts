@@ -93,5 +93,6 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)
     androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.rules)
     androidTestImplementation(libs.androidx.espresso.core)
 }

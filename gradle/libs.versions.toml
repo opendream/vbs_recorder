@@ -1,5 +1,7 @@
 [versions]
-agp = "8.6.1"
+androidxTestRulesVersion = "1.6.1"
+androidxExtJunitVersion = "1.2.1"
+agp = "8.7.1"
 awsAndroidSdkS3 = "2.22.0"
 barcodeScanning = "17.3.0"
 iirj = "1.7"
@@ -7,7 +9,7 @@ kotlin = "2.0.20"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 mockito = "4.0.0"
-junitVersion = "1.2.1"
+junitVersion = "1.6.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
 lottie = "4.2.0"
@@ -35,7 +37,8 @@ barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref =
 iirj = { module = "uk.me.berndporr:iirj", version.ref = "iirj" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 mockito-core = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxExtJunitVersion" }
+androidx-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTestRulesVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
