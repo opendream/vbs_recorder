@@ -54,6 +54,7 @@ class PlayBackFragment : Fragment() {
     private var timer: Timer? = null
 
     private var durationText = "00:00:00"
+    private var durationInSecond = 0
 
     var db: VBSDatabase? = null
     var record: th.co.opendream.vbs_recorder.models.Record? = null
@@ -400,6 +401,9 @@ class PlayBackFragment : Fragment() {
                 val minutes = (seconds / 60) % 60
                 val secs = seconds % 60
 
+                durationInSecond = seconds.toInt()
+                binding.seekBar.max = durationInSecond
+
                 durationText = String.format("%02d:%02d:%02d", hours, minutes, secs)
                 binding.timeText.text = "00:00:00 / ${durationText}"
 
@@ -566,12 +570,6 @@ class PlayBackFragment : Fragment() {
                 prepare()
             }
 
-            val maxDuration = mediaPlayer?.duration ?: 0
-
-            Log.i("PlayBackFragment", "Max Duration: $maxDuration")
-            val maxSeconds = maxDuration / 1000
-            binding.seekBar.max = maxSeconds
-
             mediaPlayer?.setOnCompletionListener {
                 isPlaying = false
 
@@ -595,23 +593,16 @@ class PlayBackFragment : Fragment() {
     }
 
     private fun refreshMediaPlayerControl(force: Boolean = false) {
-        val maxDuration = mediaPlayer?.duration ?: 0
-        val maxSeconds = maxDuration / 1000
 
         if (isPlaying || force) {
-            val duration = mediaPlayer?.currentPosition ?: 0
-            var seconds = (duration / 1000)
+            val currentPosition = mediaPlayer?.currentPosition ?: 0
+            var seconds = (currentPosition / 1000)
             if (!force) {
                 seconds += 1
             }
 
-            Log.e(
-                "PlayBackFragment",
-                "Max Duration: $maxDuration, Duration: $duration, Seconds: $seconds"
-            )
-
-            if (seconds >= maxSeconds) {
-                seconds = maxSeconds
+            if (seconds >= durationInSecond) {
+                seconds = durationInSecond
             }
 
             binding.seekBar.progress = seconds
