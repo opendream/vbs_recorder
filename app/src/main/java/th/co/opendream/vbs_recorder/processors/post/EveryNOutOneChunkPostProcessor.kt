@@ -13,14 +13,15 @@ class EveryNOutOneChunkPostProcessor(private val sampleRate: Int, private val ch
     : IPostAudioProcessor {
     override fun process(input: ByteArray): ByteArray {
         val sampleFor200msInShort = (sampleRate * chunkSizeInMs) / 1000
-        val numberOfChunks = input.size / sampleFor200msInShort
+        val sampleFor200msInBytes = sampleFor200msInShort * 2
+        val numberOfChunks = input.size / sampleFor200msInBytes
         var output = ByteArray(0)
         // write out one chunk then skip by skipValue
         for (i in 0 until numberOfChunks) {
             if (i % nValue == acceptedIndex) {
                 // write out one chunk
-                val start = i * sampleFor200msInShort
-                val end = start + sampleFor200msInShort
+                val start = i * sampleFor200msInBytes
+                val end = start + sampleFor200msInBytes
                 output += input.sliceArray(start until end)
             }
         }

@@ -24,4 +24,14 @@ interface IFileWriter {
      * Close the current file.
      */
     fun close()
+
+    /*
+     * Get the current file path.
+     */
+    fun getFilePath(): String
+
+    /*
+     * Get the current file size.
+     */
+    fun getCurrentFileSize(): Int
 }

@@ -1,5 +1,6 @@
 package th.co.opendream.vbs_recorder.processors.realtime
 
+import android.util.Log
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import java.io.File
@@ -7,7 +8,7 @@ import java.io.RandomAccessFile
 import java.util.Date
 
 class FileWriter(private val baseFilePath: String) : IFileWriter {
-    var filePath: String? = null
+    private var filePath: String? = null
     private lateinit var currentFile: RandomAccessFile
     private var fileIndex = Date().time
     private var currentFileSize = 0
@@ -18,6 +19,7 @@ class FileWriter(private val baseFilePath: String) : IFileWriter {
         filePath = "${baseFilePath}_${fileIndex++}.pcm"
         currentFile = RandomAccessFile(File(filePath!!), "rw")
         currentFileSize = 0
+        Log.d(TAG, "Created new file: $filePath")
     }
 
     override fun switchToNextFile() : String {
@@ -28,6 +30,7 @@ class FileWriter(private val baseFilePath: String) : IFileWriter {
     }
 
     override suspend fun write(data: ByteArray): Int {
+        Log.d(TAG, "Writing ${data.size} bytes to file: $filePath")
         fileMutex.withLock {
             currentFile?.write(data)
             currentFileSize += data.size
@@ -36,6 +39,19 @@ class FileWriter(private val baseFilePath: String) : IFileWriter {
     }
 
     override fun close() {
+        Log.d(TAG, "Closing file: $filePath")
         currentFile.close()
+    }
+
+    override fun getFilePath(): String {
+        return filePath!!
+    }
+
+    override fun getCurrentFileSize(): Int {
+        return currentFileSize
+    }
+
+    companion object {
+        const val TAG = "FileWriter"
     }
 }

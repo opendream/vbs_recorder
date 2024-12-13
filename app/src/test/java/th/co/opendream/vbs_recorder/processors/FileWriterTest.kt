@@ -24,19 +24,19 @@ class FileWriterTest {
     @After
     fun tearDown() {
         fileWriter.close()
-        File(fileWriter.filePath!!).delete()
+        File(fileWriter.getFilePath()).delete()
     }
 
     @Test
     fun testCreateNewFile() {
-        val file = File(fileWriter.filePath!!)
+        val file = File(fileWriter.getFilePath())
         assert(file.exists())
     }
 
     @Test
     fun testSwitchToNextFile() {
         val oldFilePath = fileWriter.switchToNextFile()
-        val newFilePath = fileWriter.filePath!!
+        val newFilePath = fileWriter.getFilePath()
 
         assert(File(oldFilePath).exists())
         assert(File(newFilePath).exists())
@@ -50,7 +50,7 @@ class FileWriterTest {
 
         assertEquals(data.size, writtenSize)
 
-        val file = RandomAccessFile(fileWriter.filePath!!, "r")
+        val file = RandomAccessFile(fileWriter.getFilePath(), "r")
         val readData = ByteArray(data.size)
         file.read(readData)
         file.close()

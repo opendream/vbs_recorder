@@ -41,7 +41,7 @@ class Record2Service : Service() {
     private var sampleRate = 44100
     private val channelConfig = AudioFormat.CHANNEL_IN_MONO
     private val audioFormat = AudioFormat.ENCODING_PCM_16BIT
-    private var sampleFor200msInShort = (sampleRate * 200) / 1000   // 8820 = 44100 * 200 / 1000
+    private var sampleFor200msInShort: Int = 0
     private var maxFileSize = 3 * 1024 * 1024 // 3 MB
 
     override fun onCreate() {
