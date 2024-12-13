@@ -80,7 +80,7 @@ class AudioProcessorTest {
     }
 
     @Test
-    fun testSwitchToNextFile(): Unit = runBlocking {
+    fun testWriteToTwoFiles(): Unit = runBlocking {
         val buffer = ShortArray(1024) { it.toShort() }
         val size = buffer.size
 

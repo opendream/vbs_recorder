@@ -2,6 +2,7 @@ package th.co.opendream.vbs_recorder.processors.realtime
 
 import android.media.AudioRecord
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class AudioRecorderProcessor(
@@ -13,8 +14,8 @@ class AudioRecorderProcessor(
     private val readFromRecorder: (ShortArray, Int, Int) -> Int,
     private val handleAudioRecordError: (Int) -> Unit
 ) {
-    fun startRecording(scope: CoroutineScope) {
-        scope.launch {
+    fun startRecording(scope: CoroutineScope): Job {
+        return scope.launch {
             var offsetInShorts = 0
             val bufferInShort = ShortArray(bufferSizeInBytes / 2)
             while (isActive() && recordState() == AudioRecord.RECORDSTATE_RECORDING) {
