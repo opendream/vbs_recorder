@@ -13,10 +13,10 @@ import kotlinx.coroutines.launch
 import th.co.opendream.vbs_recorder.db.VBSDatabase
 import th.co.opendream.vbs_recorder.processors.post.EveryNOutOneChunkPostProcessor
 import th.co.opendream.vbs_recorder.utils.SettingsUtil
-import th.co.opendream.vbs_recorder.utils.RecordUtil
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import kotlin.math.ceil
 
 class RecordProcessorService : Service(), RecordProcessorServiceListener {
     companion object {
@@ -108,7 +108,7 @@ class RecordProcessorService : Service(), RecordProcessorServiceListener {
             Log.e(TAG, "Found ${fetchData.size} records")
             if (fetchData.isNotEmpty()) {
                 for (record in fetchData) {
-                    record.duration = RecordUtil.getFileDuration(numberOfOutputBytes, sampleRate)
+                    record.duration = getFileDuration(numberOfOutputBytes, sampleRate)
                     db!!.recordDao().update(record)
                 }
             }
@@ -116,6 +116,11 @@ class RecordProcessorService : Service(), RecordProcessorServiceListener {
 
         // Simulate processing
         onFinished()
+    }
+
+    private fun getFileDuration(fileSize: Long, sampleRate: Int): Int {
+        val seconds = ceil(fileSize / (sampleRate.toDouble() * 2)).toInt()
+        return seconds
     }
 
     override fun onFinished() {
