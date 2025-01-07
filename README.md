@@ -93,4 +93,6 @@ Contains the UI and logic for recording and playing audio.
 - MediaPlayer for playing audio.
 
 ## License
-This project is licensed under the MIT License.
+This project is licensed under GNU General Public License v3.0.
+
+Initial development of this project was supported by [BBSRC Impact Acceleration Account (IAA) awarded to the University of Cambridge](https://www.research-strategy.admin.cam.ac.uk/bbsrc-impact-acceleration-account-0) under the project titled: [Accelerating the adoption of wingbeat-based sensing to quantify mosquito species abundance in the tropics](https://hatio.github.io/mosquitoSensing/) led by Dr. Angkana T. Huang.
